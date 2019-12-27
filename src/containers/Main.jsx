@@ -1,9 +1,9 @@
 import React from 'react';
 import styles from './Main.less';
-
 export default class Main extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {}
   }
   componentWillMount() {
   }
@@ -11,7 +11,7 @@ export default class Main extends React.Component {
   }
   render() {
     return (
-      <div className={styles.main}>This is React Arch branch.</div>
+      <div className={styles.main}>A React Front-End Project</div>
     );
   }
 }
