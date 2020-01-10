@@ -45,7 +45,12 @@ module.exports = {
 						loader: 'thread-loader',
 						options: threadOptions
 					},
-					'babel-loader'
+					{
+						loader: 'babel-loader',
+						options: {
+							// cacheDirectory: true
+						}
+					}
 				]
 			},
 			{
@@ -56,8 +61,18 @@ module.exports = {
 						loader: 'thread-loader',
 						options: threadOptions
 					},
-					'babel-loader'
+					{
+						loader: 'babel-loader',
+						options: {
+							// cacheDirectory: true
+						}
+					}
 				]
+			},
+			{
+				test: /\.js$/,
+				loader: 'source-map-loader',
+				enforce: 'pre'
 			},
 			// {
 			//   test: /\.jsx$/,
@@ -123,12 +138,12 @@ module.exports = {
 		//表示这几种文件的后缀名可以省略，按照从前到后的方式来进行补全
 		extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
 		alias: {
-			components: sourcePath + '/components',
-			utils: sourcePath + '/utils'
+			'@@components': path.resolve(sourcePath, 'components'),
+			'@@utils': path.resolve(sourcePath, 'utils')
 		}
 	},
 	plugins: [
-		// 将js, css文件引入html中
+		// 将js, css文件引入html中a
 		new HtmlWebpackPlugin({
 			title: 'Application',
 			filename: 'index.html',

@@ -4,7 +4,7 @@ interface State {
 }
 
 export interface ErrorBoundaryProps {
-	children: object[];
+	children: any;
 }
 
 export default class ErrorBoundary extends React.Component<ErrorBoundaryProps, State> {

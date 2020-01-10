@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styles from './Main.less';
+import styles from './Index.less';
 
 export default class Main extends React.Component {
 	public render() {
