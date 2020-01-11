@@ -1,131 +1,154 @@
 const path = require('path');
+const os = require('os');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const extractTextWebpackPlugin = require('extract-text-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const SOURCE_PATH = path.resolve(__dirname, '../src');
-const ENTRY_PATH = SOURCE_PATH + '/entries/';
-// the path(s) that should be cleaned
-let pathsToClean = [
-  'dist',
-]
-// the clean options to use
-let cleanOptions = {
-  root: __dirname, // absolute path to your webpack root folder
-  // exclude: ['shared.js'],
-  verbose: true, // Write logs to console.
-}
+const AutoDllPlugin = require('autodll-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+const sourcePath = path.resolve(__dirname, '../src');
+const entryPath = sourcePath + '/entry/';
+const templatesPath = path.resolve(__dirname, '../templates');
+const distPath = path.resolve(__dirname, '../dist');
+
+const cpus = os.cpus().length;
+const threadOptions = {
+  workers: cpus,
+  workerParallelJobs: 50,
+  workerNodeArgs: ['--max-old-space-size=1024'],
+  poolRespawn: false,
+  poolTimeout: 2000,
+  poolParallelJobs: 50,
+  name: 'my-pool'
+};
+const cssLoaderOptions = {
+  sourceMap: true,
+  modules: {
+    localIdentName: '[path][name]__[local]'
+  }
+};
 
 module.exports = {
-  entry: ENTRY_PATH + "index.jsx",
+  entry: entryPath + 'index.jsx',
   output: {
-    publicPath: '/',
-    path: path.resolve(__dirname, './dist'),
+    publicPath: '',
+    path: distPath,
     filename: '[hash].bundle.js',
     // chunkFilename: '[name].bundle.js',
   },
   module: {
-    rules: [{
-      test: /\.(js|jsx)$/,
-      exclude: /node_modules/,
-      use: 'babel-loader'
-      // options: {
-      //   presets: ['env', 'react', 'stage-0'],
-      //   plugins: [
-      //     ["import", {
-      //       "libraryName": "antd",
-      //       "libraryDirectory": "es",
-      //       "style": 'css', // or 'css'
-      //     }]
-      //   ]
-      // }
-    },
-    {
-      test: /\.jsx$/,
-      loader: 'eslint-loader',
-      enforce: "pre",
-      include: [path.resolve(__dirname, 'src')], // 指定检查的目录
-      // options: { // 这里的配置项参数将会被传递到 eslint 的 CLIEngine 
-      //     formatter: require('eslint-friendly-formatter') // 指定错误报告的格式规范
-      // }
-    },
-    {
-      test: /\.css$/,
-      use: [
-        'style-loader', 'css-loader'
-      ]
-    },
-    // {
-    //   test: /\.less$/,
-    //   use: [{
-    //     loader: "style-loader" // creates style nodes from JS strings
-    //   }, {
-    //     loader: "css-loader" // translates CSS into CommonJS
-    //   }, {
-    //     loader: "less-loader" // compiles Less to CSS
-    //   }]
-    // },
-    {
-      test: /\.less$/,
-      exclude: /node_modules/,
-      use: [{
-        loader: "style-loader" // creates style nodes from JS strings
-      }, {
-        loader: "css-loader", // translates CSS into CommonJS
-        options: {
-          sourceMap: true,
-          modules: { // 必须启用css模块才能使用带hash的className
-            localIdentName: '[path][name]__[local]' // 设置className格式
+    rules: [
+      {
+        test: /\.js(x?)$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'thread-loader',
+            options: threadOptions
+          },
+          {
+            loader: 'babel-loader',
+            options: {
+              // cacheDirectory: true
+            }
           }
-        }
-      }, {
-        loader: "less-loader" // compiles Less to CSS
-      }]
-    }
+        ]
+      },
+      {
+        test: /\.js$/,
+        loader: 'source-map-loader',
+        enforce: 'pre'
+      },
+      // {
+      //   test: /\.jsx$/,
+      //   loader: 'eslint-loader',
+      //   enforce: "pre",
+      //   include: [sourcePath], // 指定检查的目录
+      //   // options: { // 这里的配置项参数将会被传递到 eslint 的 CLIEngine 
+      //   //     formatter: require('eslint-friendly-formatter') // 指定错误报告的格式规范
+      //   // }
+      // },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              // you can specify a publicPath here
+              // by default it uses publicPath in webpackOptions.output
+              publicPath: '',
+              hmr: process.env.NODE_ENV === 'development',
+            },
+          },
+          {
+            loader: 'css-loader',
+            options: cssLoaderOptions
+          }
+        ]
+      },
+      {
+        test: /\.less$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              // you can specify a publicPath here
+              // by default it uses publicPath in webpackOptions.output
+              publicPath: '',
+              hmr: process.env.NODE_ENV === 'development',
+            },
+          },
+          {
+            loader: 'css-loader',
+            options: cssLoaderOptions
+          },
+          'less-loader'
+        ]
+      },
+      {
+        test: /\.(icon|eot|svg|ttf|TTF|woff|woff2|png|jpe?g|gif)(\?\S*)$/,
+        loader: 'file-loader',
+        query: {
+          name: '[name].[ext]?[hash]'
+        },
+        exclude: /node_modules/
+      }
     ]
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.json'], //表示这几种文件的后缀名可以省略，按照从前到后的方式来进行补全
+    //表示这几种文件的后缀名可以省略，按照从前到后的方式来进行补全
+    extensions: ['.js', '.jsx', '.json'],
     alias: {
-      components: SOURCE_PATH + '/components',
-      // assets: SOURCE_PATH + '/assets',
-      utils: SOURCE_PATH + '/utils',
-      // config: SOURCE_PATH + '/config'
+      'components': path.resolve(sourcePath, 'components'),
+      'utils': path.resolve(sourcePath, 'utils')
     }
   },
   plugins: [
-    // new webpack.optimize.UglifyJsPlugin({    // in webpack4, it will be enabled when mode is production.
-    //     test: /\.js($|\?)/i,
-    //     cache: true,
-    //     parallel: true,  // Enable parallelization. Default number of concurrent runs: os.cpus().length - 1.
-    //     sourceMap: true
-    // }),
-    new HtmlWebpackPlugin({ // 将js, css文件引入html中
-      title: "Application",
+    // 将js, css文件引入html中a
+    new HtmlWebpackPlugin({
+      title: 'Application',
       filename: 'index.html',
-      template: ENTRY_PATH + 'index.html',
+      template: path.resolve(templatesPath, 'index.html'),
       inject: 'body',
-      hash: false // will append like bundle.js?[hash] if true, instead, we configure the hash in output.
     }),
-    new extractTextWebpackPlugin('[hash].css'),
-    new CleanWebpackPlugin(pathsToClean, cleanOptions),
-    // new CopyWebpackPlugin([{
-    //     from: SOURCE_PATH + '/src/assets/js',
-    //     to: 'assets/js'
-    //   },
-    //   {
-    //     from: SOURCE_PATH + '/src/assets/image',
-    //     to: 'assets/image'
-    //   },
-    //   {
-    //     from: SOURCE_PATH + '/src/assets/json',
-    //     to: 'assets/json'
-    //   }
-    // ]),
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].css', // 非入口(non-entry) chunk 文件的名称，可以理解为通过异步加载（分块打包）打包出来的文件名称
+      ignoreOrder: false, // Enable to remove warnings about conflicting order
+    }),
     new webpack.ContextReplacementPlugin(
       /moment[/\\]locale$/,
       /zh-cn/,
-    )
+    ),
+    new AutoDllPlugin({
+      inject: true, // will inject the DLL bundles to index.html
+      filename: '[name].js',
+      entry: {
+        vendor: [
+          'react',
+          'react-dom'
+        ]
+      }
+    }),
   ]
 };
