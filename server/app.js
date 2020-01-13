@@ -3,8 +3,8 @@ import path from 'path';
 const app = new Koa();
 import webpack from 'webpack';
 import koaWebpack from 'koa-webpack';
-import webpackConfigDev from '../webpack/config.dev';
-import webpackConfigProd from '../webpack/config.prod';
+import webpackConfigDev from '../webpack/webpack.dev';
+import webpackConfigProd from '../webpack/webpack.prod';
 import logger from 'koa-logger';
 import bodyParser from 'koa-bodyparser';
 import cors from 'koa-cors';
@@ -16,7 +16,7 @@ async function start() {
     const middleware = await koaWebpack({ compiler });
 
     app.use(middleware);
-
+    
     app.use(async (ctx, next) => {
       // console.log('ctx', ctx);
       if (ctx.url === '/') {
