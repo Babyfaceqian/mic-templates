@@ -20,12 +20,7 @@ const threadOptions = {
   poolParallelJobs: 50,
   name: 'my-pool'
 };
-const cssLoaderOptions = {
-  sourceMap: true,
-  modules: {
-    localIdentName: '[path][name]__[local]'
-  }
-};
+
 
 module.exports = {
   entry: entryPath + 'index.jsx',
@@ -70,6 +65,7 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
+          // 'style-loader',
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
@@ -81,7 +77,12 @@ module.exports = {
           },
           {
             loader: 'css-loader',
-            options: cssLoaderOptions
+            options: {
+              sourceMap: true,
+              modules: {
+                localIdentName: '[path][name]__[local]'
+              }
+            }
           }
         ]
       },
@@ -89,20 +90,60 @@ module.exports = {
         test: /\.less$/,
         exclude: /node_modules/,
         use: [
+          // 'style-loader',
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
               // you can specify a publicPath here
               // by default it uses publicPath in webpackOptions.output
-              publicPath: '',
+              // publicPath: '',
               hmr: process.env.NODE_ENV === 'development',
             },
           },
           {
             loader: 'css-loader',
-            options: cssLoaderOptions
+            options: {
+              sourceMap: true,
+              modules: {
+                localIdentName: '[path][name]__[local]'
+              }
+            },
+
           },
-          'less-loader'
+          {
+            loader: 'less-loader',
+            options: {
+              // javascriptEnabled: true
+            }
+          }
+        ]
+      },
+      {
+        test: /\.less$/,
+        include: /node_modules/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              // you can specify a publicPath here
+              // by default it uses publicPath in webpackOptions.output
+              // publicPath: '',
+              hmr: process.env.NODE_ENV === 'development',
+            },
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true
+            },
+
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              javascriptEnabled: true
+            }
+          }
         ]
       },
       {
