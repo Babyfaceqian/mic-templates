@@ -1,5 +1,5 @@
 // 汇总store
-import main from './main'
+import main from '../modules/main/model/main'
  
 const stores = {
     main
