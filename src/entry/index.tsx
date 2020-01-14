@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import Main from '../containers/main/views';
+import Main from '../modules/main/Main';
 import ErrorBoundary from '@@components/errorBoundary';
+import { Provider } from 'mobx-react';
+import stores from '../model';
 
-ReactDOM.render(<ErrorBoundary><Main /></ErrorBoundary>, document.getElementById('root'));
+ReactDOM.render(<Provider {...stores}><ErrorBoundary><Main /></ErrorBoundary></Provider>, document.getElementById('root'));

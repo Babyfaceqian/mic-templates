@@ -1,6 +1,8 @@
 import * as React from 'react';
-import styles from './Index.less';
-
+import styles from './Main.less';
+import { observer, inject } from "mobx-react";
+@inject('main')
+@observer
 export default class Main extends React.Component {
 	public render() {
 		return (
