@@ -91,13 +91,18 @@ module.exports = {
 						options: {
 							// you can specify a publicPath here
 							// by default it uses publicPath in webpackOptions.output
-							publicPath: '',
+							// publicPath: '',
 							hmr: process.env.NODE_ENV === 'development',
 						},
 					},
 					{
 						loader: 'css-loader',
-						options: cssLoaderOptions
+						options: {
+              sourceMap: true,
+              modules: {
+                localIdentName: '[path][name]__[local]'
+              }
+            }
 					}
 				]
 			},
@@ -113,15 +118,22 @@ module.exports = {
 						options: {
 							// you can specify a publicPath here
 							// by default it uses publicPath in webpackOptions.output
-							publicPath: '',
+							// publicPath: '',
 							hmr: process.env.NODE_ENV === 'development',
 						},
 					},
 					{
 						loader: 'css-loader',
-						options: cssLoaderOptions
+						options: {
+              sourceMap: true
+            }
 					},
-					'less-loader'
+          {
+            loader: 'less-loader',
+            options: {
+              javascriptEnabled: true
+            }
+          }
 				]
 			},
 			{
