@@ -4,7 +4,7 @@ const common = require('./webpack.common.js');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const distPath = path.resolve(__dirname, '../dist');
 const pathsToClean = [
 	distPath
@@ -26,11 +26,9 @@ module.exports = merge(common, {
 	//     name: true
 	//   }
 	// },
-	// plugins: [
-	//   new BundleAnalyzerPlugin()
-	// ]
 	plugins: [
-		new CleanWebpackPlugin(pathsToClean, cleanOptions)
+		new CleanWebpackPlugin(pathsToClean, cleanOptions),
+		new BundleAnalyzerPlugin()
 	],
 	optimization: {
 		minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({
