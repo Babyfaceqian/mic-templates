@@ -8,7 +8,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const sourcePath = path.resolve(__dirname, '../src');
 const entryPath = sourcePath + '/entry/';
 const templatesPath = path.resolve(__dirname, '../templates');
-const distPath = path.resolve(__dirname, '../dist');
 
 const cpus = os.cpus().length;
 const threadOptions = {
@@ -21,14 +20,12 @@ const threadOptions = {
   name: 'my-pool'
 };
 
-
 module.exports = {
   entry: entryPath + 'index.jsx',
   output: {
     publicPath: '',
-    path: distPath,
-    filename: '[hash].bundle.js',
-    // chunkFilename: '[name].bundle.js',
+    path: path.resolve(__dirname, '../dist'),
+    filename: '[hash].bundle.js'
   },
   module: {
     rules: [
@@ -65,16 +62,16 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          // 'style-loader',
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
               // you can specify a publicPath here
               // by default it uses publicPath in webpackOptions.output
-              publicPath: '',
+              // publicPath: '',
               hmr: process.env.NODE_ENV === 'development',
             },
           },
+          'postcss-loader',
           {
             loader: 'css-loader',
             options: {
@@ -90,7 +87,6 @@ module.exports = {
         test: /\.less$/,
         exclude: /node_modules/,
         use: [
-          // 'style-loader',
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
@@ -107,15 +103,10 @@ module.exports = {
               modules: {
                 localIdentName: '[path][name]__[local]'
               }
-            },
-
-          },
-          {
-            loader: 'less-loader',
-            options: {
-              // javascriptEnabled: true
             }
-          }
+          },
+          'postcss-loader',
+          'less-loader'
         ]
       },
       {
@@ -136,7 +127,9 @@ module.exports = {
             options: {
               sourceMap: true
             },
-
+          },
+          {
+            loader: 'postcss-loader'
           },
           {
             loader: 'less-loader',
@@ -173,7 +166,7 @@ module.exports = {
       inject: 'body',
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].css',
+      filename: '[name].[hash].css',
       chunkFilename: '[id].css', // 非入口(non-entry) chunk 文件的名称，可以理解为通过异步加载（分块打包）打包出来的文件名称
       ignoreOrder: false, // Enable to remove warnings about conflicting order
     }),
