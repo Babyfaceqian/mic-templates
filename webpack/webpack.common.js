@@ -20,12 +20,6 @@ const threadOptions = {
   poolParallelJobs: 50,
   name: 'my-pool'
 };
-const cssLoaderOptions = {
-  sourceMap: true,
-  modules: {
-    localIdentName: '[path][name]__[local]'
-  }
-};
 
 module.exports = {
   entry: entryPath + 'index.tsx',
