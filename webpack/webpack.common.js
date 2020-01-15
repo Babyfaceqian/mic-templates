@@ -111,7 +111,7 @@ module.exports = {
 				exclude: /node_modules/,
 				use: [
 					{
-						loader: '@teamsupercell/typings-for-css-modules-loader'
+						loader: '@teamsupercell/typings-for-css-modules-loader' // 类型注解
 					},
 					{
 						loader: MiniCssExtractPlugin.loader,
@@ -125,7 +125,34 @@ module.exports = {
 					{
 						loader: 'css-loader',
 						options: {
-              sourceMap: true
+							sourceMap: true,
+							modules: {
+                localIdentName: '[path][name]__[local]'
+              }
+            }
+					},
+          {
+            loader: 'less-loader'
+          }
+				]
+			},
+			{
+				test: /\.less$/,
+				include: /node_modules/,
+				use: [
+					{
+						loader: MiniCssExtractPlugin.loader,
+						options: {
+							// you can specify a publicPath here
+							// by default it uses publicPath in webpackOptions.output
+							// publicPath: '',
+							hmr: process.env.NODE_ENV === 'development',
+						},
+					},
+					{
+						loader: 'css-loader',
+						options: {
+							sourceMap: true
             }
 					},
           {
