@@ -71,7 +71,6 @@ module.exports = {
               hmr: process.env.NODE_ENV === 'development',
             },
           },
-          'postcss-loader',
           {
             loader: 'css-loader',
             options: {
@@ -80,7 +79,8 @@ module.exports = {
                 localIdentName: '[path][name]__[local]'
               }
             }
-          }
+          },
+          'postcss-loader'
         ]
       },
       {
@@ -128,9 +128,7 @@ module.exports = {
               sourceMap: true
             },
           },
-          {
-            loader: 'postcss-loader'
-          },
+          'postcss-loader',
           {
             loader: 'less-loader',
             options: {
