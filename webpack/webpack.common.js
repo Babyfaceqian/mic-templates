@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const AutoDllPlugin = require('autodll-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const sourcePath = path.resolve(__dirname, '../src');
 const entryPath = sourcePath + '/entry/';
@@ -182,5 +183,11 @@ module.exports = {
         ]
       }
     }),
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(sourcePath, 'assets'),
+        to: path.resolve(__dirname, '../dist')
+      },
+    ])
   ]
 };
