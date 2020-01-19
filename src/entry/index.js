@@ -3,7 +3,7 @@ import Main from '../modules/main/Main'
 import { Button } from 'element-ui';
 
 // Vue.prototype.$ELEMENT = { size: 'small', zIndex: 3000 };
-Vue.use(Button);
+Vue.component(Button.name, Button);
 
 Vue.config.productionTip = false
 
