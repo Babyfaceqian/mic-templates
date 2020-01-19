@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const AutoDllPlugin = require('autodll-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 const sourcePath = path.resolve(__dirname, '../src');
 const entryPath = sourcePath + '/entry/';
@@ -22,7 +23,7 @@ const threadOptions = {
 };
 
 module.exports = {
-  entry: entryPath + 'index.jsx',
+  entry: entryPath + 'index.js',
   output: {
     publicPath: '',
     path: path.resolve(__dirname, '../dist'),
@@ -31,7 +32,12 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js(x?)$/,
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        exclude: /node_modules/
+      },
+      {
+        test: /\.js$/,
         exclude: /node_modules/,
         use: [
           {
@@ -76,9 +82,9 @@ module.exports = {
             loader: 'css-loader',
             options: {
               sourceMap: true,
-              modules: {
-                localIdentName: '[path][name]__[local]'
-              }
+              // modules: {
+              //   localIdentName: '[path][name]__[local]'
+              // }
             }
           },
           'postcss-loader'
@@ -91,9 +97,6 @@ module.exports = {
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              // you can specify a publicPath here
-              // by default it uses publicPath in webpackOptions.output
-              // publicPath: '',
               hmr: process.env.NODE_ENV === 'development',
             },
           },
@@ -101,9 +104,9 @@ module.exports = {
             loader: 'css-loader',
             options: {
               sourceMap: true,
-              modules: {
-                localIdentName: '[path][name]__[local]'
-              }
+              // modules: {
+              //   localIdentName: '[path][name]__[local]'
+              // }
             }
           },
           'postcss-loader',
@@ -117,9 +120,6 @@ module.exports = {
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              // you can specify a publicPath here
-              // by default it uses publicPath in webpackOptions.output
-              // publicPath: '',
               hmr: process.env.NODE_ENV === 'development',
             },
           },
@@ -150,7 +150,7 @@ module.exports = {
   },
   resolve: {
     //表示这几种文件的后缀名可以省略，按照从前到后的方式来进行补全
-    extensions: ['.js', '.jsx', '.json'],
+    extensions: ['.vue', '.js', '.jsx', '.json'],
     alias: {
       'components': path.resolve(sourcePath, 'components'),
       'utils': path.resolve(sourcePath, 'utils')
@@ -164,6 +164,7 @@ module.exports = {
       template: path.resolve(templatesPath, 'index.html'),
       inject: 'body',
     }),
+    new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name].[hash].css',
       chunkFilename: '[id].css', // 非入口(non-entry) chunk 文件的名称，可以理解为通过异步加载（分块打包）打包出来的文件名称
@@ -178,8 +179,7 @@ module.exports = {
       filename: '[name].js',
       entry: {
         vendor: [
-          'react',
-          'react-dom'
+          'vue'
         ]
       }
     }),

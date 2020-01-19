@@ -1,14 +1,8 @@
 {
   "presets": [
-    "@babel/preset-env",
-    "@babel/preset-react"
+    "@babel/preset-env"
   ],
   "plugins": [
-    ["import", {
-      "libraryName": "antd",
-      "libraryDirectory": "es",
-      "style": true
-    }],
     ["@babel/plugin-transform-runtime", {
       "corejs": false,
       "helpers": true,
@@ -22,5 +16,4 @@
       "loose": true
     }]
   ]
-
 }
