@@ -1,15 +1,18 @@
 <template>
-  <div class="example">{{ msg }}</div>
+  <div class="example">
+    {{ msg }}
+    <el-button>button</el-button>
+  </div>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-      msg: 'A Vue Project'
-    }
+      msg: "A Vue Project"
+    };
   }
-}
+};
 </script>
 
 <style scoped>

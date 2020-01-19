@@ -72,19 +72,13 @@ module.exports = {
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              // you can specify a publicPath here
-              // by default it uses publicPath in webpackOptions.output
-              // publicPath: '',
               hmr: process.env.NODE_ENV === 'development',
             },
           },
           {
             loader: 'css-loader',
             options: {
-              sourceMap: true,
-              // modules: {
-              //   localIdentName: '[path][name]__[local]'
-              // }
+              sourceMap: true
             }
           },
           'postcss-loader'
@@ -100,13 +94,11 @@ module.exports = {
               hmr: process.env.NODE_ENV === 'development',
             },
           },
+          // 'vue-style-loader',
           {
             loader: 'css-loader',
             options: {
-              sourceMap: true,
-              // modules: {
-              //   localIdentName: '[path][name]__[local]'
-              // }
+              sourceMap: true
             }
           },
           'postcss-loader',
@@ -139,12 +131,11 @@ module.exports = {
         ]
       },
       {
-        test: /\.(icon|eot|svg|ttf|TTF|woff|woff2|png|jpe?g|gif)(\?\S*)$/,
+        test: /\.(icon|eot|svg|ttf|TTF|woff|woff2|png|jpe?g|gif)$/,
         loader: 'file-loader',
         query: {
           name: '[name].[ext]?[hash]'
         },
-        exclude: /node_modules/
       }
     ]
   },
