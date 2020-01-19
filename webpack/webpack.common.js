@@ -26,7 +26,7 @@ module.exports = {
   entry: entryPath + 'index.js',
   output: {
     publicPath: '',
-    path: path.resolve(__dirname, '../dist'),
+    path: path.resolve(__dirname, '../build'),
     filename: '[hash].bundle.js'
   },
   module: {
@@ -177,7 +177,7 @@ module.exports = {
     new CopyWebpackPlugin([
       {
         from: path.resolve(sourcePath, 'assets'),
-        to: path.resolve(__dirname, '../dist')
+        to: path.resolve(__dirname, '../build')
       },
     ])
   ]
