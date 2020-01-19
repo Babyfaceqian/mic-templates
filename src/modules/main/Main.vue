@@ -1,7 +1,7 @@
 <template>
   <div class="example">
     {{ msg }}
-    <el-button>button</el-button>
+    <el-button @click="handleClick">button</el-button>
   </div>
 </template>
 
@@ -11,11 +11,16 @@ export default {
     return {
       msg: "A Vue Project"
     };
+  },
+  methods: {
+    handleClick() {
+      console.log("handleClick");
+    }
   }
 };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .example {
   color: blue;
 }
