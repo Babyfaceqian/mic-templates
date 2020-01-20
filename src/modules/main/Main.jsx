@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './Main.less';
 import { connect } from 'react-redux';
 import * as Acts from '../../model/main/action';
+import Sub from './Sub';
 class Main extends React.Component {
   constructor(props) {
     super(props);
@@ -19,7 +20,9 @@ class Main extends React.Component {
   render() {
     console.log(this.props, 'render');
     return (
-      <div className={styles.main}>{this.props.main.todos.text}<button onClick={this.handleClick}>button</button></div>
+      <div className={styles.main}>{this.props.main.todos.text}<button onClick={this.handleClick}>button</button>
+      <Sub />
+      </div>
     );
   }
 }

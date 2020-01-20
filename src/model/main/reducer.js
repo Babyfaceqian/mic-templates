@@ -3,7 +3,7 @@ const todos = (state = { text: '' }, action) => {
   switch (action.type) {
     case 'ADD_TODO':
       state.text = action.payload;
-      return state;
+      return {...state};
     default:
       return state
   }
