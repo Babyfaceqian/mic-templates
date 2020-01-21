@@ -4,6 +4,7 @@ const common = require('./webpack.common.js');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const AutoDllPlugin = require('autodll-webpack-plugin');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const distPath = path.resolve(__dirname, '../dist');
 const pathsToClean = [
@@ -30,7 +31,17 @@ module.exports = merge(common, {
 	//   new BundleAnalyzerPlugin()
 	// ]
 	plugins: [
-		new CleanWebpackPlugin(pathsToClean, cleanOptions)
+		new CleanWebpackPlugin(pathsToClean, cleanOptions),
+    new AutoDllPlugin({
+      inject: true, // will inject the DLL bundles to index.html
+      filename: '[name].js',
+      entry: {
+        vendor: [
+          'react',
+          'react-dom'
+        ]
+      }
+    })
 	],
 	optimization: {
 		minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({
