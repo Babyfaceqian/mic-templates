@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Main from '../modules/main/Main';
+import 'core-js';
 import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 import { Provider } from 'mobx-react';
 import stores from '../model';

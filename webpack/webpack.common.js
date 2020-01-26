@@ -2,8 +2,8 @@ const path = require('path');
 const os = require('os');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const AutoDllPlugin = require('autodll-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const sourcePath = path.resolve(__dirname, '../src');
 const entryPath = sourcePath + '/entry/';
@@ -24,7 +24,7 @@ module.exports = {
   entry: entryPath + 'index.jsx',
   output: {
     publicPath: '',
-    path: path.resolve(__dirname, '../dist'),
+    path: path.resolve(__dirname, '../build'),
     filename: '[hash].bundle.js'
   },
   module: {
@@ -174,15 +174,11 @@ module.exports = {
       /moment[/\\]locale$/,
       /zh-cn/,
     ),
-    new AutoDllPlugin({
-      inject: true, // will inject the DLL bundles to index.html
-      filename: '[name].js',
-      entry: {
-        vendor: [
-          'react',
-          'react-dom'
-        ]
-      }
-    }),
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(sourcePath, 'assets'),
+        to: path.resolve(__dirname, '../build')
+      },
+    ])
   ]
 };
