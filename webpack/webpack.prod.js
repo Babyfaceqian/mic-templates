@@ -1,6 +1,6 @@
 const merge = require('webpack-merge');
-const path = require('path');
 const common = require('./webpack.common.js');
+const AutoDllPlugin = require('autodll-webpack-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
@@ -22,7 +22,17 @@ module.exports = merge(common, {
   //   new BundleAnalyzerPlugin()
   // ]
   plugins: [
-    new CleanWebpackPlugin() // 默认清除 output 的 path 路径
+	new CleanWebpackPlugin(),// 默认清除 output 的 path 路径
+    new AutoDllPlugin({
+      inject: true, // will inject the DLL bundles to index.html
+      filename: '[name].js',
+      entry: {
+        vendor: [
+          'react',
+          'react-dom'
+        ]
+      }
+    }),
   ],
   optimization: {
     minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({

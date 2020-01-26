@@ -2,13 +2,11 @@ const path = require('path');
 const os = require('os');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const AutoDllPlugin = require('autodll-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const sourcePath = path.resolve(__dirname, '../src');
 const entryPath = sourcePath + '/entry/';
 const templatesPath = path.resolve(__dirname, '../templates');
-const distPath = path.resolve(__dirname, '../dist');
 
 const cpus = os.cpus().length;
 const threadOptions = {
@@ -20,18 +18,12 @@ const threadOptions = {
   poolParallelJobs: 50,
   name: 'my-pool'
 };
-const cssLoaderOptions = {
-  sourceMap: true,
-  modules: {
-    localIdentName: '[path][name]__[local]'
-  }
-};
 
 module.exports = {
   entry: [entryPath],
   output: {
     publicPath: '/',
-    path: distPath,
+    path: path.resolve(__dirname, '../build'),
     filename: '[hash].bundle.js',
     // chunkFilename: '[name].bundle.js',
   },
@@ -81,8 +73,14 @@ module.exports = {
           },
           {
             loader: 'css-loader',
-            options: cssLoaderOptions
-          }
+            options: {
+              sourceMap: true,
+              modules: {
+                localIdentName: '[path][name]__[local]'
+              }
+            }
+          },
+          'postcss-loader'
         ]
       },
       {
@@ -100,9 +98,43 @@ module.exports = {
           },
           {
             loader: 'css-loader',
-            options: cssLoaderOptions
+            options: {
+              sourceMap: true,
+              modules: {
+                localIdentName: '[path][name]__[local]'
+              }
+            }
           },
+          'postcss-loader',
           'less-loader'
+        ]
+      },
+      {
+        test: /\.less$/,
+        include: /node_modules/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              // you can specify a publicPath here
+              // by default it uses publicPath in webpackOptions.output
+              // publicPath: '',
+              hmr: process.env.NODE_ENV === 'development',
+            },
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true
+            },
+          },
+          'postcss-loader',
+          {
+            loader: 'less-loader',
+            options: {
+              javascriptEnabled: true
+            }
+          }
         ]
       },
       {
@@ -139,16 +171,6 @@ module.exports = {
     new webpack.ContextReplacementPlugin(
       /moment[/\\]locale$/,
       /zh-cn/,
-    ),
-    new AutoDllPlugin({
-      inject: true, // will inject the DLL bundles to index.html
-      filename: '[name].js',
-      entry: {
-        vendor: [
-          'react',
-          'react-dom'
-        ]
-      }
-    }),
+    )
   ]
 };

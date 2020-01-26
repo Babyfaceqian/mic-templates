@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import { createHashHistory } from 'history';
-import 'antd/dist/antd.css';
+import 'core-js'
 import Wrapper from '../modules/layout/views/wrapper';
 import { menuList } from 'config';
 
