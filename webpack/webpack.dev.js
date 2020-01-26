@@ -6,7 +6,7 @@ module.exports = merge(common, {
 	mode: 'development',
 	devtool: 'cheap-module-source-map',
 	devServer: {
-		contentBase: './dist',
+		// contentBase: './build',
 		port: 8080
 	}
 });

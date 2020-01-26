@@ -1,19 +1,10 @@
 const merge = require('webpack-merge');
-const path = require('path');
 const common = require('./webpack.common.js');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const AutoDllPlugin = require('autodll-webpack-plugin');
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const distPath = path.resolve(__dirname, '../dist');
-const pathsToClean = [
-	distPath
-];
-const cleanOptions = {
-	root: path.resolve(__dirname, '../'),
-	verbose: true, // 打印log
-};
 
 module.exports = merge(common, {
 	mode: 'production',
@@ -27,21 +18,19 @@ module.exports = merge(common, {
 	//     name: true
 	//   }
 	// },
-	// plugins: [
-	//   new BundleAnalyzerPlugin()
-	// ]
 	plugins: [
-		new CleanWebpackPlugin(pathsToClean, cleanOptions),
-    new AutoDllPlugin({
-      inject: true, // will inject the DLL bundles to index.html
-      filename: '[name].js',
-      entry: {
-        vendor: [
-          'react',
-          'react-dom'
-        ]
-      }
-    })
+		new CleanWebpackPlugin(),
+		new AutoDllPlugin({
+			inject: true, // will inject the DLL bundles to index.html
+			filename: '[name].js',
+			entry: {
+			  vendor: [
+				'react',
+				'react-dom'
+			  ]
+			}
+		  }),
+		new BundleAnalyzerPlugin()
 	],
 	optimization: {
 		minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({
