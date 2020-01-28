@@ -10,6 +10,7 @@
     "test": "jest --coverage"
   },
   "dependencies": {
+    "antd": "^3.26.7",
     "axios": "^0.19.1",
     "core-js": "^3.6.4",
     "react": "^16.12.0",
