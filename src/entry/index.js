@@ -1,5 +1,6 @@
-import Vue from 'vue'
-import Main from '../modules/main/Main'
+import 'core-js';
+import Vue from 'vue';
+import Main from '../modules/main/Main';
 import { Button } from 'element-ui';
 
 // Vue.prototype.$ELEMENT = { size: 'small', zIndex: 3000 };

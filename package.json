@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "axios": "^0.19.1",
+    "core-js": "^3.6.4",
     "element-ui": "^2.13.0",
     "vue": "^2.6.11"
   },
@@ -19,7 +20,6 @@
     "@babel/core": "7.5.5",
     "@babel/plugin-proposal-class-properties": "7.5.5",
     "@babel/plugin-proposal-decorators": "7.8.3",
-    "@babel/plugin-transform-runtime": "7.5.5",
     "@babel/preset-env": "7.5.5",
     "@vue/test-utils": "^1.0.0-beta.30",
     "autodll-webpack-plugin": "0.4.2",

@@ -2,7 +2,6 @@ const path = require('path');
 const os = require('os');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const AutoDllPlugin = require('autodll-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
@@ -165,15 +164,6 @@ module.exports = {
       /moment[/\\]locale$/,
       /zh-cn/,
     ),
-    new AutoDllPlugin({
-      inject: true, // will inject the DLL bundles to index.html
-      filename: '[name].js',
-      entry: {
-        vendor: [
-          'vue'
-        ]
-      }
-    }),
     new CopyWebpackPlugin([
       {
         from: path.resolve(sourcePath, 'assets'),
