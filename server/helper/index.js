@@ -8,3 +8,4 @@ export const getJSON = (fileName) => {
   let f = fs.readFileSync(getFilePath(fileName), "utf-8")
   return JSON.parse(f)
 }
+export {default as db} from './mysql'
